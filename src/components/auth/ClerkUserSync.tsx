@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useAuth } from "@/context/AuthContext";
 
-export function ClerkUserSync() {
+function ClerkUserSyncInner() {
   const { isLoaded, isSignedIn, user } = useUser();
   const { setExternalUser } = useAuth();
 
@@ -27,4 +27,12 @@ export function ClerkUserSync() {
   }, [isLoaded, isSignedIn, user, setExternalUser]);
 
   return null;
+}
+
+export function ClerkUserSync() {
+  const { isClerkActive } = useAuth();
+
+  if (!isClerkActive) return null;
+
+  return <ClerkUserSyncInner />;
 }

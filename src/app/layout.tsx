@@ -3,7 +3,6 @@ import "./globals.css";
 import { AppShell } from "@/components/layout/AppShell";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
-import { ClerkUserSync } from "@/components/auth/ClerkUserSync";
 
 export const metadata: Metadata = {
   title: "OneAtlas.dev – AI Model Discovery & Intelligence Platform",
@@ -39,7 +38,6 @@ export default function RootLayout({
       >
         <html lang="en" className="dark">
           <body className="font-sans bg-background text-gray-100 antialiased min-h-screen">
-            <ClerkUserSync />
             <AppShell>{children}</AppShell>
           </body>
         </html>

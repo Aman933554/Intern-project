@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { SignUp } from "@clerk/nextjs";
 import { Key, Sparkles, ShieldCheck } from "lucide-react";
@@ -30,22 +30,30 @@ export default function SignUpPage() {
           </div>
 
           <div className="bg-card border border-surface-300 rounded-2xl p-2 shadow-2xl">
-            <SignUp
-              path="/sign-up"
-              routing="path"
-              signInUrl="/sign-in"
-              appearance={{
-                elements: {
-                  card: "bg-transparent shadow-none border-none",
-                  headerTitle: "text-white text-lg font-bold",
-                  headerSubtitle: "text-gray-400 text-xs",
-                  socialButtonsBlockButton: "bg-surface-200 border border-surface-300 text-white hover:bg-surface-300",
-                  formButtonPrimary: "bg-electric-blue hover:bg-electric-blue-600 text-white font-medium shadow-glow",
-                  formFieldInput: "bg-surface-100 border-surface-300 text-white focus:border-electric-blue",
-                  footerActionLink: "text-electric-blue hover:underline",
-                },
-              }}
-            />
+            <Suspense
+              fallback={
+                <div className="w-[380px] h-[450px] flex items-center justify-center text-xs text-gray-400">
+                  Loading Clerk Sign Up...
+                </div>
+              }
+            >
+              <SignUp
+                path="/sign-up"
+                routing="path"
+                signInUrl="/sign-in"
+                appearance={{
+                  elements: {
+                    card: "bg-transparent shadow-none border-none",
+                    headerTitle: "text-white text-lg font-bold",
+                    headerSubtitle: "text-gray-400 text-xs",
+                    socialButtonsBlockButton: "bg-surface-200 border border-surface-300 text-white hover:bg-surface-300",
+                    formButtonPrimary: "bg-electric-blue hover:bg-electric-blue-600 text-white font-medium shadow-glow",
+                    formFieldInput: "bg-surface-100 border-surface-300 text-white focus:border-electric-blue",
+                    footerActionLink: "text-electric-blue hover:underline",
+                  },
+                }}
+              />
+            </Suspense>
           </div>
         </div>
       ) : (
@@ -77,10 +85,6 @@ export default function SignUpPage() {
           </div>
 
           <div className="border-t border-surface-300 pt-5">
-            <h2 className="text-sm font-semibold text-white mb-2">Built-in Registration (Active Now)</h2>
-            <p className="text-xs text-gray-400 mb-4">
-              You can create an account immediately using the built-in system while setting up your Clerk credentials.
-            </p>
             <div className="flex flex-col sm:flex-row items-center gap-3">
               <Link
                 href="/models"

@@ -8,6 +8,7 @@ import { Sidebar } from "@/components/layout/Sidebar";
 import { Footer } from "@/components/layout/Footer";
 import { CompareFloatingBar } from "@/components/common/CompareFloatingBar";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { ClerkUserSync } from "@/components/auth/ClerkUserSync";
 
 export const AppShell: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -16,6 +17,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthProvider>
+      <ClerkUserSync />
       <ComparisonProvider>
         <div className="min-h-screen bg-background text-gray-100 flex flex-col selection:bg-electric-blue/30 selection:text-white">
           <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
