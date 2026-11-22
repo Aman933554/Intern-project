@@ -41,6 +41,8 @@ export default function SignInPage() {
                 path="/sign-in"
                 routing="path"
                 signUpUrl="/sign-up"
+                fallbackRedirectUrl="/"
+                forceRedirectUrl="/"
                 appearance={{
                   elements: {
                     card: "bg-transparent shadow-none border-none",
