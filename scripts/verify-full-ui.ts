@@ -183,18 +183,39 @@ async function verify() {
 
   // 7. HTML Page Responses & HTTP 200
   try {
-    const pages = ["/", "/models", "/compare", "/rankings", "/companies", "/providers", "/about"];
+    const pages = ["/", "/models", "/compare", "/rankings", "/companies", "/providers", "/saved", "/about"];
     let pagesOk = true;
     for (const p of pages) {
       const res = await fetch(`${BASE_URL}${p}`);
       if (res.status !== 200) {
         pagesOk = false;
+        console.error(`Page ${p} returned ${res.status}`);
         break;
       }
     }
-    record("HTML Server-Rendered Pages", pagesOk, `All primary navigation pages return HTTP 200 OK with server-rendered markup`);
+    record("HTML Server-Rendered Pages", pagesOk, `All primary navigation pages including /saved return HTTP 200 OK`);
   } catch (e: any) {
     record("HTML Pages", false, e.message);
+  }
+
+  // 8. Auth & Saved Models API (Option B)
+  try {
+    // Test login
+    const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: "demo@oneatlas.dev", password: "password123" }),
+    });
+    const loginJson = await loginRes.json();
+
+    // Test saved models query
+    const savedRes = await fetch(`${BASE_URL}/api/user/saved?userId=${loginJson.data?.id}`);
+    const savedJson = await savedRes.json();
+
+    const authPass = loginRes.ok && loginJson.success && savedRes.ok && savedJson.success && savedJson.data.length >= 3;
+    record("Auth & Saved Models API (Option B)", authPass, `Logged in as ${loginJson.data?.email}, retrieved ${savedJson.data?.length} saved models`);
+  } catch (e: any) {
+    record("Auth & Saved Models API (Option B)", false, e.message);
   }
 
   console.log("\n=========================================================");

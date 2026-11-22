@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { Copy, Check, Plus, Layers } from "lucide-react";
+import { Copy, Check, Plus, Layers, Bookmark } from "lucide-react";
 import { useComparison } from "@/context/ComparisonContext";
+import { useAuth } from "@/context/AuthContext";
 
 interface ModelDetailActionsProps {
   slug: string;
@@ -16,7 +17,10 @@ export const ModelDetailActions: React.FC<ModelDetailActionsProps> = ({
 }) => {
   const [copied, setCopied] = useState(false);
   const { addModel, removeModel, isModelSelected, selectedSlugs } = useComparison();
+  const { toggleSave, isModelSaved } = useAuth();
+
   const selected = isModelSelected(slug);
+  const saved = isModelSaved(slug);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(slug);
@@ -32,8 +36,27 @@ export const ModelDetailActions: React.FC<ModelDetailActionsProps> = ({
     }
   };
 
+  const handleToggleSave = async () => {
+    await toggleSave(slug);
+  };
+
   return (
     <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 shrink-0">
+      {/* Bookmark Button */}
+      <button
+        onClick={handleToggleSave}
+        className={`flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg text-xs font-semibold border transition-all ${
+          saved
+            ? "bg-electric-blue/20 border-electric-blue text-electric-blue"
+            : "bg-surface-200 hover:bg-surface-300 text-gray-300 border-surface-300"
+        }`}
+        title={saved ? "Remove from saved models" : "Save model to favorites"}
+      >
+        <Bookmark className={`w-4 h-4 ${saved ? "fill-current" : ""}`} />
+        <span>{saved ? "Saved" : "Save"}</span>
+      </button>
+
+      {/* Copy Identifier Button */}
       <button
         onClick={handleCopy}
         className="flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-lg bg-surface-200 hover:bg-surface-300 text-gray-200 text-xs font-semibold border border-surface-300 transition-colors"
@@ -47,11 +70,12 @@ export const ModelDetailActions: React.FC<ModelDetailActionsProps> = ({
         ) : (
           <>
             <Copy className="w-4 h-4 text-gray-400" />
-            <span>Copy Identifier</span>
+            <span>Copy ID</span>
           </>
         )}
       </button>
 
+      {/* Compare Toggle Button */}
       <button
         onClick={handleToggleCompare}
         className={`flex items-center justify-center gap-1.5 px-4 py-2 rounded-lg text-xs font-semibold border transition-all ${
@@ -73,6 +97,7 @@ export const ModelDetailActions: React.FC<ModelDetailActionsProps> = ({
         )}
       </button>
 
+      {/* Compare shortcut if >= 2 */}
       {selectedSlugs.length >= 2 && (
         <Link
           href={`/compare?models=${selectedSlugs.join(",")}`}

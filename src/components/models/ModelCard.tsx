@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ModelSummary } from "@/types";
 import { formatPrice, formatContextWindow, formatDate, getCompanyInitials } from "@/lib/utils";
 import { useComparison } from "@/context/ComparisonContext";
+import { useAuth } from "@/context/AuthContext";
 import {
   Layers,
   ArrowRight,
@@ -13,6 +14,7 @@ import {
   Coins,
   Cpu,
   Sparkles,
+  Bookmark,
 } from "lucide-react";
 
 interface ModelCardProps {
@@ -21,7 +23,10 @@ interface ModelCardProps {
 
 export const ModelCard: React.FC<ModelCardProps> = ({ model }) => {
   const { addModel, removeModel, isModelSelected } = useComparison();
+  const { toggleSave, isModelSaved } = useAuth();
+
   const selected = isModelSelected(model.slug);
+  const saved = isModelSaved(model.slug);
 
   const handleToggleCompare = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -33,9 +38,15 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model }) => {
     }
   };
 
+  const handleToggleSave = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    await toggleSave(model.slug);
+  };
+
   return (
     <div className="bg-card border border-surface-300 rounded-xl p-5 hover:border-gray-600 transition-all flex flex-col justify-between glow-border relative group">
-      {/* Top row: Company initials badge, name, trending pill */}
+      {/* Top row: Company initials badge, name, trending pill & bookmark */}
       <div>
         <div className="flex items-start justify-between gap-3 mb-2.5">
           <div className="flex items-center gap-2.5">
@@ -65,6 +76,19 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model }) => {
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
+            {/* Bookmark button */}
+            <button
+              onClick={handleToggleSave}
+              className={`p-1.5 rounded-lg border transition-colors ${
+                saved
+                  ? "bg-electric-blue/20 border-electric-blue text-electric-blue"
+                  : "bg-surface-200 border-surface-300 text-gray-400 hover:text-white"
+              }`}
+              title={saved ? "Remove from bookmarks" : "Save model to bookmarks"}
+            >
+              <Bookmark className={`w-3.5 h-3.5 ${saved ? "fill-current" : ""}`} />
+            </button>
+
             {model.isTrending && (
               <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet/15 border border-violet/30 text-[10px] font-semibold text-violet">
                 <Sparkles className="w-3 h-3" />
@@ -73,7 +97,7 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model }) => {
             )}
             {model.isFree && (
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[10px] font-semibold text-emerald-400">
-                Free Tier
+                Free
               </span>
             )}
           </div>

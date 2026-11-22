@@ -307,10 +307,46 @@ async function runTests() {
     assert(false, 17, "API validation & Error handling", err.message);
   }
 
+  // TEST 18: User Authentication & Bookmarked Models (Option B)
+  try {
+    const { registerUser, loginUser, toggleSavedModel, getSavedModelSlugs } = await import("../src/lib/auth-service");
+    
+    // Test 1-click / login with demo account
+    const demoUser = await loginUser("demo@oneatlas.dev", "password123");
+    const initialSaved = await getSavedModelSlugs(demoUser.id);
+    
+    // Test registration
+    const testEmail = `test_${Date.now()}@oneatlas.dev`;
+    const newUser = await registerUser("Intern Tester", testEmail, "testpass123");
+    
+    // Test bookmark toggle (add model)
+    const toggleAdd = await toggleSavedModel(newUser.id, "o3-mini");
+    const savedAfterAdd = await getSavedModelSlugs(newUser.id);
+    
+    // Test bookmark toggle (remove model)
+    const toggleRemove = await toggleSavedModel(newUser.id, "o3-mini");
+    const savedAfterRemove = await getSavedModelSlugs(newUser.id);
+
+    assert(
+      demoUser.email === "demo@oneatlas.dev" &&
+      initialSaved.length >= 3 &&
+      newUser.email === testEmail &&
+      toggleAdd.isSaved === true &&
+      savedAfterAdd.includes("o3-mini") &&
+      toggleRemove.isSaved === false &&
+      !savedAfterRemove.includes("o3-mini"),
+      18,
+      "User Authentication, Registration, and Saved Models Bookmarking (Option B)",
+      `Demo: ${demoUser.email} (${initialSaved.length} saved), New user: ${newUser.email}, Bookmark add/remove toggle fully verified`
+    );
+  } catch (err: any) {
+    assert(false, 18, "User Authentication & Bookmarked Models (Option B)", err.message);
+  }
+
   console.log("\n=================================================");
   const allPassed = results.every((r) => r.passed);
   console.log(`TOTAL TESTS: ${results.length} | PASSED: ${results.filter((r) => r.passed).length} | FAILED: ${results.filter((r) => !r.passed).length}`);
-  console.log(allPassed ? "🎉 ALL 17 FUNCTIONAL TESTS PASSED!" : "⚠️ SOME TESTS FAILED");
+  console.log(allPassed ? "🎉 ALL 18 FUNCTIONAL TESTS PASSED!" : "⚠️ SOME TESTS FAILED");
   console.log("=================================================");
 
   if (!allPassed) {
