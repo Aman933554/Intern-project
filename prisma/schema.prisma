@@ -1,0 +1,192 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(cuid())
+  email       String       @unique
+  name        String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  savedModels SavedModel[]
+}
+
+model SavedModel {
+  id        String   @id @default(cuid())
+  userId    String
+  modelId   String
+  createdAt DateTime @default(now())
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  model Model @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, modelId])
+  @@index([userId])
+  @@index([modelId])
+}
+
+model Company {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  websiteUrl  String?
+  logoUrl     String?
+  country     String?
+  models      Model[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([name])
+}
+
+model Provider {
+  id             String          @id @default(cuid())
+  name           String
+  slug           String          @unique
+  description    String?
+  websiteUrl     String?
+  logoUrl        String?
+  modelProviders ModelProvider[]
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+
+  @@index([name])
+}
+
+model Model {
+  id              String            @id @default(cuid())
+  name            String
+  slug            String            @unique
+  description     String
+  architecture    String?
+  modelType       String            // e.g. "Chat", "Multimodal", "Reasoning", "Code", "Embedding"
+  contextWindow   Int               // In tokens (e.g., 128000, 1000000)
+  maxOutputTokens Int?              // Maximum generation tokens (e.g., 16384, 8192)
+  releaseDate     DateTime?
+  isFree          Boolean           @default(false)
+  isTrending      Boolean           @default(false)
+  isFeatured      Boolean           @default(false)
+  modalities      String[]          @default([]) // e.g. ["Text", "Image", "Audio"]
+  
+  companyId       String
+  company         Company           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  pricing         Pricing[]
+  modelProviders  ModelProvider[]
+  capabilities    ModelCapability[]
+  benchmarks      ModelBenchmark[]
+  savedBy         SavedModel[]
+
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  @@index([name])
+  @@index([modelType])
+  @@index([contextWindow])
+  @@index([isFree])
+  @@index([isTrending])
+  @@index([companyId])
+}
+
+model ModelProvider {
+  id              String   @id @default(cuid())
+  modelId         String
+  providerId      String
+  providerModelId String   // e.g. "openai/gpt-4o"
+  latencyMs       Float?   // average time-to-first-token in ms
+  throughputTps   Float?   // tokens per second
+  isAvailable     Boolean  @default(true)
+
+  model    Model    @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  provider Provider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([modelId, providerId])
+  @@index([providerId])
+  @@index([modelId])
+}
+
+model Capability {
+  id          String            @id @default(cuid())
+  name        String            @unique
+  slug        String            @unique
+  description String?
+  icon        String?           // Lucide icon name hint
+  models      ModelCapability[]
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+}
+
+model ModelCapability {
+  id           String     @id @default(cuid())
+  modelId      String
+  capabilityId String
+  score        Float?     // 0.0 - 1.0 or qualitative score
+  
+  model      Model      @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  capability Capability @relation(fields: [capabilityId], references: [id], onDelete: Cascade)
+
+  @@unique([modelId, capabilityId])
+  @@index([modelId])
+  @@index([capabilityId])
+}
+
+model Pricing {
+  id                     String   @id @default(cuid())
+  modelId                String
+  inputPricePerMillion   Float    // Price in USD per 1M input tokens
+  outputPricePerMillion  Float    // Price in USD per 1M output tokens
+  cacheReadPricePerMillion Float? // Price in USD per 1M cached input tokens
+  currency               String   @default("USD")
+  effectiveDate          DateTime @default(now())
+
+  model Model @relation(fields: [modelId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([inputPricePerMillion])
+  @@index([outputPricePerMillion])
+  @@index([modelId])
+}
+
+model Benchmark {
+  id              String           @id @default(cuid())
+  name            String           @unique // e.g. "MMLU", "HumanEval", "MATH", "GPQA"
+  category        String           // "Overall", "Coding", "Reasoning", "Mathematics", "Knowledge", "Vision"
+  description     String?
+  maxScore        Float            @default(100.0)
+  unit            String           @default("%")
+  modelBenchmarks ModelBenchmark[]
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([category])
+}
+
+model ModelBenchmark {
+  id           String    @id @default(cuid())
+  modelId      String
+  benchmarkId  String
+  score        Float     // Benchmark result percentage or score
+  notes        String?
+  isSampleData Boolean   @default(true) // Explicit disclaimer compliance
+
+  model     Model     @relation(fields: [modelId], references: [id], onDelete: Cascade)
+  benchmark Benchmark @relation(fields: [benchmarkId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([modelId, benchmarkId])
+  @@index([benchmarkId, score])
+  @@index([modelId])
+}
