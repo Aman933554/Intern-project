@@ -15,6 +15,8 @@ interface AuthContextType {
   logout: () => void;
   toggleSave: (slug: string) => Promise<boolean>;
   isModelSaved: (slug: string) => boolean;
+  setExternalUser: (user: UserSession | null) => void;
+  isClerkActive: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -96,6 +98,23 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await login("demo@oneatlas.dev", "password123");
   };
 
+  const isClerkActive = Boolean(
+    typeof process !== "undefined" &&
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY &&
+    process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.startsWith("pk_") &&
+    !process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY.includes("YOUR_")
+  );
+
+  const setExternalUser = (externalUser: UserSession | null) => {
+    if (externalUser) {
+      setUser(externalUser);
+      fetchSavedSlugs(externalUser.id);
+    } else {
+      setUser(null);
+      setSavedSlugs([]);
+    }
+  };
+
   const logout = () => {
     setUser(null);
     setSavedSlugs([]);
@@ -147,6 +166,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logout,
         toggleSave,
         isModelSaved,
+        setExternalUser,
+        isClerkActive,
       }}
     >
       {children}

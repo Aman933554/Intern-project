@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { X, Mail, Lock, User, Sparkles, ArrowRight, Check } from "lucide-react";
+import Link from "next/link";
+import { X, Mail, Lock, User, Sparkles, ArrowRight, Check, ShieldCheck } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, closeAuthModal, login, register, loginDemo } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, login, register, loginDemo, isClerkActive } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -93,6 +94,22 @@ export const AuthModal: React.FC = () => {
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
+          {isClerkActive && (
+            <div className="mb-4">
+              <Link
+                href={mode === "login" ? "/sign-in" : "/sign-up"}
+                onClick={closeAuthModal}
+                className="w-full py-2.5 rounded-lg bg-gradient-to-r from-electric-blue to-violet text-white text-xs font-semibold shadow-glow flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
+              >
+                <ShieldCheck className="w-4 h-4" />
+                <span>Open Official Clerk {mode === "login" ? "Sign In" : "Sign Up"} Page</span>
+              </Link>
+              <div className="relative my-4 text-center">
+                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-surface-300" /></div>
+                <span className="relative bg-card px-2 text-[10px] text-gray-500 uppercase tracking-wider">or sign in below</span>
+              </div>
+            </div>
+          )}
           {mode === "register" && (
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1">

@@ -183,7 +183,7 @@ async function verify() {
 
   // 7. HTML Page Responses & HTTP 200
   try {
-    const pages = ["/", "/models", "/compare", "/rankings", "/companies", "/providers", "/saved", "/about"];
+    const pages = ["/", "/models", "/compare", "/rankings", "/companies", "/providers", "/saved", "/sign-in", "/sign-up", "/about"];
     let pagesOk = true;
     for (const p of pages) {
       const res = await fetch(`${BASE_URL}${p}`);
@@ -193,7 +193,7 @@ async function verify() {
         break;
       }
     }
-    record("HTML Server-Rendered Pages", pagesOk, `All primary navigation pages including /saved return HTTP 200 OK`);
+    record("HTML Server-Rendered Pages", pagesOk, `All primary navigation pages including /saved, /sign-in, /sign-up return HTTP 200 OK`);
   } catch (e: any) {
     record("HTML Pages", false, e.message);
   }

@@ -6,6 +6,7 @@ import { Search, Database, Sparkles, Menu, X, ArrowUpRight, User, LogOut, Bookma
 import { GlobalSearchModal } from "./GlobalSearchModal";
 import { useAuth } from "@/context/AuthContext";
 import { getCompanyInitials } from "@/lib/utils";
+import { ClerkUserNav } from "@/components/auth/ClerkUserNav";
 
 interface NavbarProps {
   onToggleSidebar?: () => void;
@@ -14,7 +15,7 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
-  const { user, logout, openAuthModal, savedSlugs } = useAuth();
+  const { user, logout, openAuthModal, savedSlugs, isClerkActive } = useAuth();
   const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -104,7 +105,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           </Link>
 
           {/* User Auth Menu */}
-          {user ? (
+          {isClerkActive ? (
+            <ClerkUserNav />
+          ) : user ? (
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
