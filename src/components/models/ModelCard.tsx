@@ -45,12 +45,12 @@ export const ModelCard: React.FC<ModelCardProps> = ({ model }) => {
   };
 
   return (
-    <div className="bg-card border border-surface-300 rounded-xl p-5 hover:border-gray-600 transition-all flex flex-col justify-between glow-border relative group">
+    <div className="bg-card/90 backdrop-blur-md border border-surface-300/80 rounded-2xl p-5 hover:border-surface-400 transition-all flex flex-col justify-between glow-border relative group shadow-lg hover:shadow-2xl hover:-translate-y-0.5">
       {/* Top row: Company initials badge, name, trending pill & bookmark */}
       <div>
         <div className="flex items-start justify-between gap-3 mb-2.5">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-surface-200 border border-surface-300 flex items-center justify-center font-bold text-xs text-electric-blue">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-surface-200 to-surface-100 border border-surface-300/80 flex items-center justify-center font-bold text-xs text-electric-blue shadow-inner">
               {getCompanyInitials(model.company.name)}
             </div>
             <div>

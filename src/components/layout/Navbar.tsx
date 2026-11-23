@@ -30,7 +30,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
 
   return (
     <>
-      <header className="sticky top-0 z-40 w-full h-16 border-b border-surface-300 bg-background/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between">
+      <header className="sticky top-0 z-40 w-full h-16 border-b border-surface-300/80 bg-background/80 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between shadow-lg">
         <div className="flex items-center gap-3">
           {/* Mobile hamburger */}
           <button
@@ -43,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center shadow-glow group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-electric-blue via-indigo-500 to-violet flex items-center justify-center shadow-glow group-hover:scale-105 transition-all">
               <Sparkles className="w-4 h-4 text-white" />
             </div>
             <div className="flex flex-col">
@@ -61,13 +61,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         <div className="flex-1 max-w-md mx-4 hidden sm:block">
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface-100 border border-surface-300 hover:border-gray-600 text-gray-400 text-xs transition-all cursor-pointer shadow-inner"
+            className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface-100/90 border border-surface-300/80 hover:border-surface-400 text-gray-400 hover:text-gray-200 text-xs transition-all cursor-pointer shadow-inner hover:bg-surface-200/90"
           >
             <div className="flex items-center gap-2">
-              <Search className="w-3.5 h-3.5 text-gray-400" />
+              <Search className="w-3.5 h-3.5 text-electric-blue" />
               <span>Search models, labs, providers...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 bg-surface-300 border border-gray-700 rounded text-[10px] text-gray-400 font-mono">
+            <kbd className="px-1.5 py-0.5 bg-surface-300/80 border border-surface-400/80 rounded text-[10px] text-gray-300 font-mono">
               Ctrl+K
             </kbd>
           </button>
@@ -85,21 +85,21 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           </button>
 
           {/* Database indicator */}
-          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-200 border border-surface-300 text-[11px] text-gray-300 font-mono">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-200/70 border border-surface-300/80 text-[11px] text-gray-300 font-mono shadow-sm">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-glow-emerald" />
             <span>PostgreSQL Ready</span>
           </div>
 
           <Link
             href="/models"
-            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200 transition-colors"
+            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors"
           >
             <span>Explore</span>
           </Link>
 
           <Link
             href="/compare"
-            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200 transition-colors"
+            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors"
           >
             <span>Compare</span>
           </Link>
@@ -109,9 +109,9 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200 hover:bg-surface-300 border border-surface-300 text-white transition-colors cursor-pointer"
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200/90 hover:bg-surface-300/90 border border-surface-300 text-white transition-all cursor-pointer shadow-sm"
               >
-                <div className="relative w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-[10px] text-white shrink-0 shadow-glow select-none">
+                <div className="relative w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue via-indigo-500 to-violet flex items-center justify-center font-bold text-[10px] text-white shrink-0 shadow-glow select-none">
                   <span>{getCompanyInitials(user.name)}</span>
                   <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-1 ring-card" />
                 </div>
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           ) : (
             <button
               onClick={openAuthModal}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 text-white shadow-glow transition-all cursor-pointer"
+              className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-electric-blue to-blue-600 hover:from-electric-blue-400 hover:to-electric-blue text-white shadow-glow transition-all cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               <span>Sign In</span>

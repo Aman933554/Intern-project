@@ -26,31 +26,31 @@ export default async function HomeDashboard() {
   return (
     <div className="space-y-10">
       {/* Hero Banner */}
-      <section className="relative rounded-2xl border border-surface-300 bg-gradient-to-br from-surface-100 via-surface-50 to-surface-100 p-6 sm:p-8 overflow-hidden shadow-2xl">
-        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-80 h-80 rounded-full bg-electric-blue/10 blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-1/3 -mb-20 w-80 h-80 rounded-full bg-violet/10 blur-3xl pointer-events-none" />
+      <section className="relative rounded-2xl border border-surface-300/80 bg-gradient-to-br from-surface-100/90 via-surface-50/70 to-surface-100/90 p-6 sm:p-10 overflow-hidden shadow-2xl backdrop-blur-xl">
+        <div className="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-electric-blue/15 blur-3xl pointer-events-none" />
+        <div className="absolute bottom-0 left-1/3 -mb-20 w-96 h-96 rounded-full bg-violet/15 blur-3xl pointer-events-none" />
 
         <div className="relative z-10 max-w-3xl">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-electric-blue/15 border border-electric-blue/30 text-xs font-semibold text-electric-blue mb-4">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-electric-blue/20 via-violet/15 to-transparent border border-electric-blue/30 text-xs font-semibold text-electric-blue mb-4 shadow-sm">
             <Sparkles className="w-3.5 h-3.5" />
             <span>OneAtlas.dev Intelligence Registry</span>
           </div>
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-3">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight leading-tight mb-4">
             Discover, Compare & Evaluate{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-blue via-blue-400 to-violet">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric-blue via-sky-300 to-violet drop-shadow-[0_0_30px_rgba(14,165,233,0.35)]">
               Frontier AI Models
             </span>
           </h1>
 
-          <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 max-w-2xl">
+          <p className="text-gray-300 text-sm sm:text-base leading-relaxed mb-6 max-w-2xl font-normal">
             A centralized platform mapping the foundation model landscape. Explore token pricing, verified benchmarks, 2M+ context windows, and latency across top inference providers.
           </p>
 
           <div className="flex flex-wrap items-center gap-3">
             <Link
               href="/models"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 text-white font-semibold text-sm shadow-glow transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-electric-blue to-blue-600 hover:from-electric-blue-400 hover:to-electric-blue text-white font-semibold text-sm shadow-glow transition-all cursor-pointer"
             >
               <Box className="w-4 h-4" />
               <span>Explore All Models</span>
@@ -58,7 +58,7 @@ export default async function HomeDashboard() {
 
             <Link
               href="/compare"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-surface-200 hover:bg-surface-300 text-gray-200 font-semibold text-sm border border-surface-300 transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface-200/90 hover:bg-surface-300 text-white font-semibold text-sm border border-surface-300/80 transition-all shadow-sm cursor-pointer"
             >
               <span>Compare Top Models</span>
               <ArrowRight className="w-4 h-4" />
@@ -66,7 +66,7 @@ export default async function HomeDashboard() {
 
             <Link
               href="/rankings"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-transparent hover:bg-surface-200 text-gray-400 hover:text-white text-sm transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-transparent hover:bg-surface-200/80 text-gray-300 hover:text-white text-sm transition-all cursor-pointer"
             >
               <Trophy className="w-4 h-4 text-amber-400" />
               <span>Leaderboards</span>
