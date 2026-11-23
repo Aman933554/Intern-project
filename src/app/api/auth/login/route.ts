@@ -3,8 +3,8 @@ import { loginUser } from "@/lib/auth-service";
 import { z } from "zod";
 
 const loginSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(1, "Password is required").optional(),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(1, "Password is required"),
 });
 
 export async function POST(request: NextRequest) {
@@ -21,14 +21,22 @@ export async function POST(request: NextRequest) {
 
     const session = await loginUser(validated.data.email, validated.data.password);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: session,
     });
+
+    response.cookies.set("oneatlas_session", JSON.stringify(session), {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: "lax",
+    });
+
+    return response;
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err.message || "Invalid email or password" },
-      { status: 401 }
+      { status: 400 }
     );
   }
 }

@@ -1,28 +1,47 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
-import { X, Mail, Lock, User, Sparkles, ArrowRight, Check, ShieldCheck } from "lucide-react";
+import { X, Mail, Lock, User, Sparkles, ArrowRight, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 
 export const AuthModal: React.FC = () => {
-  const { isAuthModalOpen, closeAuthModal, login, register, loginDemo, isClerkActive } = useAuth();
+  const { isAuthModalOpen, closeAuthModal, login, register, loginDemo } = useAuth();
   const [mode, setMode] = useState<"login" | "register">("login");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   if (!isAuthModalOpen) return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
+
     try {
       if (mode === "login") {
-        await login(email, password);
+        const res = await login(email, password);
+        if (!res.success) {
+          setError(res.error || "Login failed. Check your email and password.");
+        }
       } else {
-        await register(name, email, password);
+        if (!name.trim()) {
+          setError("Please enter your name.");
+          setLoading(false);
+          return;
+        }
+        if (password.length < 6) {
+          setError("Password must be at least 6 characters.");
+          setLoading(false);
+          return;
+        }
+        const res = await register(name, email, password);
+        if (!res.success) {
+          setError(res.error || "Could not create account.");
+        }
       }
     } finally {
       setLoading(false);
@@ -30,6 +49,7 @@ export const AuthModal: React.FC = () => {
   };
 
   const handleDemo = async () => {
+    setError(null);
     setLoading(true);
     try {
       await loginDemo();
@@ -43,7 +63,7 @@ export const AuthModal: React.FC = () => {
       role="dialog"
       aria-modal="true"
       aria-label="Account Authentication"
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-in fade-in duration-150"
     >
       <div className="w-full max-w-md bg-card border border-surface-300 rounded-2xl shadow-2xl overflow-hidden flex flex-col">
         {/* Header */}
@@ -62,15 +82,20 @@ export const AuthModal: React.FC = () => {
             <span className="font-bold text-white text-base">OneAtlas Account</span>
           </div>
           <p className="text-xs text-gray-400">
-            Sign in to bookmark foundation models, customize comparison docks, and track token quotas.
+            {mode === "login"
+              ? "Sign in with your email & password to access saved models and comparisons."
+              : "Create a new account with your email & password to start exploring."}
           </p>
 
           {/* Mode Switch Tabs */}
           <div className="flex rounded-lg bg-surface-100 p-1 mt-4 border border-surface-300">
             <button
               type="button"
-              onClick={() => setMode("login")}
-              className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all ${
+              onClick={() => {
+                setMode("login");
+                setError(null);
+              }}
+              className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 mode === "login"
                   ? "bg-electric-blue text-white shadow-glow"
                   : "text-gray-400 hover:text-white"
@@ -80,8 +105,11 @@ export const AuthModal: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => setMode("register")}
-              className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all ${
+              onClick={() => {
+                setMode("register");
+                setError(null);
+              }}
+              className={`flex-1 py-1.5 rounded-md text-xs font-semibold transition-all cursor-pointer ${
                 mode === "register"
                   ? "bg-electric-blue text-white shadow-glow"
                   : "text-gray-400 hover:text-white"
@@ -94,22 +122,13 @@ export const AuthModal: React.FC = () => {
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="p-6 space-y-4">
-          {isClerkActive && (
-            <div className="mb-4">
-              <Link
-                href={mode === "login" ? "/sign-in" : "/sign-up"}
-                onClick={closeAuthModal}
-                className="w-full py-2.5 rounded-lg bg-gradient-to-r from-electric-blue to-violet text-white text-xs font-semibold shadow-glow flex items-center justify-center gap-2 hover:opacity-90 transition-opacity"
-              >
-                <ShieldCheck className="w-4 h-4" />
-                <span>Open Official Clerk {mode === "login" ? "Sign In" : "Sign Up"} Page</span>
-              </Link>
-              <div className="relative my-4 text-center">
-                <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-surface-300" /></div>
-                <span className="relative bg-card px-2 text-[10px] text-gray-500 uppercase tracking-wider">or sign in below</span>
-              </div>
+          {error && (
+            <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/30 text-xs text-red-300 flex items-start gap-2">
+              <AlertCircle className="w-4 h-4 shrink-0 text-red-400 mt-0.5" />
+              <span>{error}</span>
             </div>
           )}
+
           {mode === "register" && (
             <div>
               <label className="block text-xs font-medium text-gray-300 mb-1">
@@ -122,7 +141,7 @@ export const AuthModal: React.FC = () => {
                   required
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Alex Chen"
+                  placeholder="e.g. Aman Sharma"
                   className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-100 border border-surface-300 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-electric-blue transition-colors"
                 />
               </div>
@@ -140,7 +159,7 @@ export const AuthModal: React.FC = () => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="developer@company.com"
+                placeholder="you@example.com"
                 className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-100 border border-surface-300 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-electric-blue transition-colors"
               />
             </div>
@@ -153,35 +172,48 @@ export const AuthModal: React.FC = () => {
             <div className="relative">
               <Lock className="w-4 h-4 text-gray-500 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                className="w-full pl-9 pr-3 py-2 rounded-lg bg-surface-100 border border-surface-300 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-electric-blue transition-colors"
+                placeholder={mode === "register" ? "At least 6 characters" : "Enter your password"}
+                className="w-full pl-9 pr-10 py-2 rounded-lg bg-surface-100 border border-surface-300 text-xs text-white placeholder-gray-500 focus:outline-none focus:border-electric-blue transition-colors"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((prev) => !prev)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+              >
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
             </div>
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 disabled:opacity-50 text-white text-xs font-semibold shadow-glow transition-all flex items-center justify-center gap-1.5"
+            className="w-full py-2.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 disabled:opacity-50 text-white text-xs font-semibold shadow-glow transition-all flex items-center justify-center gap-1.5 cursor-pointer"
           >
-            <span>{mode === "login" ? "Sign In to Account" : "Create Account"}</span>
+            <span>
+              {loading
+                ? "Processing..."
+                : mode === "login"
+                ? "Sign In with Email & Password"
+                : "Create Account with Email & Password"}
+            </span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
 
           {/* Quick Demo Login Option */}
-          <div className="pt-2">
+          <div className="pt-2 border-t border-surface-300">
             <button
               type="button"
               onClick={handleDemo}
               disabled={loading}
-              className="w-full py-2 rounded-lg bg-surface-200 hover:bg-surface-300 border border-surface-300 text-gray-300 text-xs font-medium transition-colors flex items-center justify-center gap-1.5"
+              className="w-full py-2 rounded-lg bg-surface-200 hover:bg-surface-300 border border-surface-300 text-gray-300 text-xs font-medium transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-violet" />
-              <span>One-Click Demo Login (demo@oneatlas.dev)</span>
+              <span>Instant Demo Account (demo@oneatlas.dev)</span>
             </button>
           </div>
         </form>

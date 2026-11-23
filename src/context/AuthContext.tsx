@@ -3,14 +3,20 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { UserSession } from "@/lib/auth-service";
 
+export interface AuthResponse {
+  success: boolean;
+  error?: string;
+  data?: UserSession;
+}
+
 interface AuthContextType {
   user: UserSession | null;
   savedSlugs: string[];
   isAuthModalOpen: boolean;
   openAuthModal: () => void;
   closeAuthModal: () => void;
-  login: (email: string, password?: string) => Promise<boolean>;
-  register: (name: string, email: string, password?: string) => Promise<boolean>;
+  login: (email: string, password?: string) => Promise<AuthResponse>;
+  register: (name: string, email: string, password?: string) => Promise<AuthResponse>;
   loginDemo: () => Promise<void>;
   logout: () => void;
   toggleSave: (slug: string) => Promise<boolean>;
@@ -26,14 +32,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [savedSlugs, setSavedSlugs] = useState<string[]>([]);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
 
-  // Restore session from localStorage on mount
+  // Restore session from localStorage or cookie on mount
   useEffect(() => {
     try {
       const storedUser = localStorage.getItem("oneatlas_user");
       if (storedUser) {
         const parsed = JSON.parse(storedUser);
-        setUser(parsed);
-        fetchSavedSlugs(parsed.id);
+        if (parsed?.id) {
+          setUser(parsed);
+          fetchSavedSlugs(parsed.id);
+          return;
+        }
+      }
+
+      // Fallback check cookie
+      if (typeof document !== "undefined") {
+        const match = document.cookie.match(/oneatlas_session=([^;]+)/);
+        if (match) {
+          const parsed = JSON.parse(decodeURIComponent(match[1]));
+          if (parsed?.id) {
+            setUser(parsed);
+            localStorage.setItem("oneatlas_user", JSON.stringify(parsed));
+            fetchSavedSlugs(parsed.id);
+          }
+        }
       }
     } catch {}
   }, []);
@@ -48,7 +70,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {}
   };
 
-  const login = async (email: string, password?: string): Promise<boolean> => {
+  const login = async (email: string, password?: string): Promise<AuthResponse> => {
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
@@ -57,21 +79,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        alert(json.error || "Login failed");
-        return false;
+        return { success: false, error: json.error || "Login failed. Check your email & password." };
       }
       setUser(json.data);
       localStorage.setItem("oneatlas_user", JSON.stringify(json.data));
       await fetchSavedSlugs(json.data.id);
       setIsAuthModalOpen(false);
-      return true;
+      return { success: true, data: json.data };
     } catch (err: any) {
-      alert(err.message || "Login error");
-      return false;
+      return { success: false, error: err.message || "Network error. Please try again." };
     }
   };
 
-  const register = async (name: string, email: string, password?: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password?: string): Promise<AuthResponse> => {
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
@@ -80,17 +100,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       });
       const json = await res.json();
       if (!res.ok || !json.success) {
-        alert(json.error || "Registration failed");
-        return false;
+        return { success: false, error: json.error || "Failed to create account." };
       }
       setUser(json.data);
       localStorage.setItem("oneatlas_user", JSON.stringify(json.data));
       await fetchSavedSlugs(json.data.id);
       setIsAuthModalOpen(false);
-      return true;
+      return { success: true, data: json.data };
     } catch (err: any) {
-      alert(err.message || "Registration error");
-      return false;
+      return { success: false, error: err.message || "Network error during registration." };
     }
   };
 
@@ -120,6 +138,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setSavedSlugs([]);
     try {
       localStorage.removeItem("oneatlas_user");
+      if (typeof document !== "undefined") {
+        document.cookie = "oneatlas_session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+      }
     } catch {}
   };
 

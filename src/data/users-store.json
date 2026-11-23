@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "id": "usr_demo",
+      "name": "Demo Engineer",
+      "email": "demo@oneatlas.dev",
+      "password": "password123"
+    },
+    {
+      "id": "usr_1795425396587_gpxa",
+      "name": "Aman Sharma",
+      "email": "sharmaaman9318411@gmail.com",
+      "password": "AmanPassword@2026"
+    }
+  ],
+  "savedModels": {
+    "usr_demo": [
+      "gpt-4o",
+      "claude-3-5-sonnet",
+      "deepseek-r1"
+    ],
+    "usr_1795425396587_gpxa": [
+      "gpt-4o",
+      "gemini-2-0-flash"
+    ]
+  }
+}

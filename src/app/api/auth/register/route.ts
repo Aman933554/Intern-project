@@ -4,8 +4,8 @@ import { z } from "zod";
 
 const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(6, "Password must be at least 6 characters").optional(),
+  email: z.string().email("Please enter a valid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
 });
 
 export async function POST(request: NextRequest) {
@@ -26,10 +26,18 @@ export async function POST(request: NextRequest) {
       validated.data.password
     );
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       success: true,
       data: session,
     });
+
+    response.cookies.set("oneatlas_session", JSON.stringify(session), {
+      path: "/",
+      maxAge: 60 * 60 * 24 * 30, // 30 days
+      sameSite: "lax",
+    });
+
+    return response;
   } catch (err: any) {
     return NextResponse.json(
       { success: false, error: err.message || "Failed to create account" },
