@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { loginUser } from "@/lib/auth-service";
+import { sendLoginAlertEmail } from "@/lib/email-service";
 import { z } from "zod";
 
 const loginSchema = z.object({
@@ -21,9 +22,15 @@ export async function POST(request: NextRequest) {
 
     const session = await loginUser(validated.data.email, validated.data.password);
 
+    // Send login alert notification email asynchronously
+    sendLoginAlertEmail(session.email, session.name).catch((err) =>
+      console.error("Login alert email error:", err)
+    );
+
     const response = NextResponse.json({
       success: true,
       data: session,
+      message: `Signed in successfully. Security notification sent to ${session.email}`,
     });
 
     response.cookies.set("oneatlas_session", JSON.stringify(session), {

@@ -1,0 +1,19 @@
+[
+  {
+    "id": "mail_1795428094621",
+    "to": "amansharma846706@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T10:01:34.621Z",
+    "status": "sent"
+  },
+  {
+    "id": "mail_1795427978790",
+    "to": "amansharma846706@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T09:59:38.790Z",
+    "previewUrl": "https://ethereal.email/message/awQOmeiVxZpKjESZawQOnnnSi3L0c3w9AAAAAcWDdZWxU91rFgGYy6hrju8",
+    "status": "sent"
+  }
+]

@@ -1,79 +1,33 @@
 export {};
 
-async function testAuth() {
+async function testAuthWithEmailAlert() {
   const BASE_URL = "http://localhost:3000";
-  console.log("=== Testing Original Email & Password Authentication ===");
+  console.log("=== Testing Authentication & Email Notification Alert ===");
 
-  // 1. Health check
-  const healthRes = await fetch(`${BASE_URL}/`);
-  console.log(`1. Homepage status: ${healthRes.status} (Expected: 200)`);
+  const userEmail = "amansharma846706@gmail.com";
+  const userPassword = "123aman@Aman";
 
-  // 2. Register Aman Sharma
-  const testEmail = "sharmaaman9318411@gmail.com";
-  const testPassword = "AmanPassword@2026";
-  const testName = "Aman Sharma";
-
-  console.log("\n2. Attempting registration for:", testEmail);
-  const regRes = await fetch(`${BASE_URL}/api/auth/register`, {
+  console.log("\n1. Attempting login for:", userEmail);
+  const loginRes = await fetch(`${BASE_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      name: testName,
-      email: testEmail,
-      password: testPassword,
+      email: userEmail,
+      password: userPassword,
     }),
   });
-  const regJson = await regRes.json();
-  console.log(`Registration status: ${regRes.status}`, regJson);
+  const loginJson = await loginRes.json();
+  console.log(`Login status: ${loginRes.status}`, loginJson);
 
-  // 3. Register duplicate email -> should fail
-  console.log("\n3. Attempting duplicate registration (should fail):");
-  const dupRes = await fetch(`${BASE_URL}/api/auth/register`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      name: testName,
-      email: testEmail,
-      password: testPassword,
-    }),
-  });
-  const dupJson = await dupRes.json();
-  console.log(`Duplicate registration status: ${dupRes.status}`, dupJson);
+  console.log("\n2. Waiting 3 seconds for async email dispatch...");
+  await new Promise((r) => setTimeout(r, 3000));
 
-  // 4. Login with WRONG password -> should fail
-  console.log("\n4. Attempting login with WRONG password (should fail):");
-  const wrongLoginRes = await fetch(`${BASE_URL}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: testEmail,
-      password: "wrongpassword123",
-    }),
-  });
-  const wrongJson = await wrongLoginRes.json();
-  console.log(`Wrong password status: ${wrongLoginRes.status}`, wrongJson);
+  console.log("\n3. Checking email dispatch log for:", userEmail);
+  const emailLogRes = await fetch(`${BASE_URL}/api/auth/emails?email=${userEmail}`);
+  const emailLogJson = await emailLogRes.json();
+  console.log("Email logs found:", JSON.stringify(emailLogJson, null, 2));
 
-  // 5. Login with CORRECT password -> should succeed
-  console.log("\n5. Attempting login with CORRECT password:");
-  const correctLoginRes = await fetch(`${BASE_URL}/api/auth/login`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      email: testEmail,
-      password: testPassword,
-    }),
-  });
-  const correctJson = await correctLoginRes.json();
-  console.log(`Correct login status: ${correctLoginRes.status}`, correctJson);
-
-  // 6. Check sign-in and sign-up pages
-  const signInPageRes = await fetch(`${BASE_URL}/sign-in`);
-  console.log(`\n6. /sign-in page status: ${signInPageRes.status} (Expected: 200)`);
-
-  const signUpPageRes = await fetch(`${BASE_URL}/sign-up`);
-  console.log(`7. /sign-up page status: ${signUpPageRes.status} (Expected: 200)`);
-
-  console.log("\n=== ALL AUTH TESTS COMPLETE ===");
+  console.log("\n=== AUTH & EMAIL ALERT TESTS COMPLETE ===");
 }
 
-testAuth().catch(console.error);
+testAuthWithEmailAlert().catch(console.error);

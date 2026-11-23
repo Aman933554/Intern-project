@@ -216,6 +216,11 @@ export const AuthModal: React.FC = () => {
               <span>Instant Demo Account (demo@oneatlas.dev)</span>
             </button>
           </div>
+
+          <div className="text-[11px] text-gray-400 text-center flex items-center justify-center gap-1.5 pt-1">
+            <Mail className="w-3 h-3 text-electric-blue" />
+            <span>A sign-in security message is automatically sent to your email.</span>
+          </div>
         </form>
       </div>
     </div>
