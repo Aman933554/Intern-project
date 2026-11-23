@@ -77,18 +77,24 @@ async function sendViaResend(to: string, subject: string, html: string): Promise
 async function getTransporter() {
   const host = process.env.SMTP_HOST;
   const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
-  const port = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 587;
+  const pass = process.env.SMTP_PASS?.replace(/\s+/g, ""); // strip any accidental whitespace
+  const port = process.env.SMTP_PORT ? parseInt(process.env.SMTP_PORT) : 465;
 
   // 1. Live SMTP configuration (e.g. Gmail App Password or custom SMTP)
-  if (host && user && pass) {
+  if ((host || user) && pass) {
+    const isGmail = host?.includes("gmail") || user?.includes("@gmail.com");
     return {
-      transporter: nodemailer.createTransport({
-        host,
-        port,
-        secure: port === 465,
-        auth: { user, pass },
-      }),
+      transporter: isGmail
+        ? nodemailer.createTransport({
+            service: "gmail",
+            auth: { user, pass },
+          })
+        : nodemailer.createTransport({
+            host: host || "smtp.gmail.com",
+            port,
+            secure: port === 465,
+            auth: { user, pass },
+          }),
       isLive: true,
     };
   }
