@@ -310,19 +310,19 @@ async function runTests() {
   // TEST 18: User Authentication & Bookmarked Models (Option B)
   try {
     const { registerUser, loginUser, toggleSavedModel, getSavedModelSlugs } = await import("../src/lib/auth-service");
-    
+
     // Test 1-click / login with demo account
     const demoUser = await loginUser("demo@oneatlas.dev", "password123");
     const initialSaved = await getSavedModelSlugs(demoUser.id);
-    
+
     // Test registration
     const testEmail = `test_${Date.now()}@oneatlas.dev`;
     const newUser = await registerUser("Intern Tester", testEmail, "testpass123");
-    
+
     // Test bookmark toggle (add model)
     const toggleAdd = await toggleSavedModel(newUser.id, "o3-mini");
     const savedAfterAdd = await getSavedModelSlugs(newUser.id);
-    
+
     // Test bookmark toggle (remove model)
     const toggleRemove = await toggleSavedModel(newUser.id, "o3-mini");
     const savedAfterRemove = await getSavedModelSlugs(newUser.id);
