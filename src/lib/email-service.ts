@@ -42,6 +42,35 @@ export function getSentEmails(): EmailLogEntry[] {
   return [];
 }
 
+async function sendViaResend(to: string, subject: string, html: string): Promise<boolean> {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) return false;
+
+  try {
+    const res = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: process.env.EMAIL_FROM || "OneAtlas Security <onboarding@resend.dev>",
+        to: [to],
+        subject,
+        html,
+      }),
+    });
+    const json = await res.json();
+    if (res.ok && json.id) {
+      console.log(`[Email Service] Resend email successfully dispatched to ${to}. ID: ${json.id}`);
+      return true;
+    }
+  } catch (err) {
+    console.error("[Email Service] Resend dispatch error:", err);
+  }
+  return false;
+}
+
 /**
  * Creates or retrieves a nodemailer transporter
  */
@@ -150,25 +179,25 @@ export async function sendLoginAlertEmail(email: string, name?: string): Promise
   `;
 
   try {
-    const { transporter } = await getTransporter();
+    const resendSuccess = await sendViaResend(email, subject, html);
     let previewUrl: string | undefined = undefined;
 
-    if (transporter) {
-      const from = process.env.EMAIL_FROM || '"OneAtlas.dev Security" <security@oneatlas.dev>';
-      const info = await transporter.sendMail({
-        from,
-        to: email,
-        subject,
-        html,
-      });
+    if (!resendSuccess) {
+      const { transporter } = await getTransporter();
+      if (transporter) {
+        const from = process.env.EMAIL_FROM || '"OneAtlas.dev Security" <security@oneatlas.dev>';
+        const info = await transporter.sendMail({
+          from,
+          to: email,
+          subject,
+          html,
+        });
 
-      previewUrl = nodemailer.getTestMessageUrl(info) || undefined;
-      console.log(`[Email Service] Login alert email sent to ${email}. MessageId: ${info.messageId}`);
-      if (previewUrl) {
-        console.log(`[Email Service] Ethereal Preview URL: ${previewUrl}`);
+        previewUrl = nodemailer.getTestMessageUrl(info) || undefined;
+        console.log(`[Email Service] Login alert email sent to ${email} via SMTP.`);
+      } else {
+        console.log(`[Email Service] Logged login notification for ${email} (no SMTP configured).`);
       }
-    } else {
-      console.log(`[Email Service] Logged login notification for ${email} (no SMTP configured).`);
     }
 
     saveEmailLog({
@@ -236,18 +265,21 @@ export async function sendWelcomeEmail(email: string, name?: string): Promise<{ 
   `;
 
   try {
-    const { transporter } = await getTransporter();
+    const resendSuccess = await sendViaResend(email, subject, html);
     let previewUrl: string | undefined = undefined;
 
-    if (transporter) {
-      const from = process.env.EMAIL_FROM || '"OneAtlas.dev" <welcome@oneatlas.dev>';
-      const info = await transporter.sendMail({
-        from,
-        to: email,
-        subject,
-        html,
-      });
-      previewUrl = nodemailer.getTestMessageUrl(info) || undefined;
+    if (!resendSuccess) {
+      const { transporter } = await getTransporter();
+      if (transporter) {
+        const from = process.env.EMAIL_FROM || '"OneAtlas.dev" <welcome@oneatlas.dev>';
+        const info = await transporter.sendMail({
+          from,
+          to: email,
+          subject,
+          html,
+        });
+        previewUrl = nodemailer.getTestMessageUrl(info) || undefined;
+      }
     }
 
     saveEmailLog({
