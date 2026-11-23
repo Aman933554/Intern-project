@@ -122,14 +122,14 @@ export async function sendLoginAlertEmail(email: string, name?: string): Promise
   <meta charset="utf-8">
   <title>OneAtlas Sign-in Alert</title>
 </head>
-<body style="margin: 0; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #060907; color: #F0FDF4;">
-  <div style="max-width: 560px; margin: 0 auto; background-color: #0D1410; border: 1px solid #192A20; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+<body style="margin: 0; padding: 24px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #0A0714; color: #FAF5FF;">
+  <div style="max-width: 560px; margin: 0 auto; background-color: #120D24; border: 1px solid #251B47; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
     <!-- Header -->
-    <div style="padding: 24px 32px; background: linear-gradient(135deg, #131F18, #0D1410); border-bottom: 1px solid #192A20;">
+    <div style="padding: 24px 32px; background: linear-gradient(135deg, #1A1333, #120D24); border-bottom: 1px solid #251B47;">
       <div style="font-size: 20px; font-weight: bold; color: #FFFFFF;">
-        OneAtlas<span style="color: #10B981;">.dev</span>
+        OneAtlas<span style="color: #8B5CF6;">.dev</span>
       </div>
-      <div style="font-size: 11px; color: #6EE7B7; margin-top: 2px; text-transform: uppercase; letter-spacing: 1px;">
+      <div style="font-size: 11px; color: #C4B5FD; margin-top: 2px; text-transform: uppercase; letter-spacing: 1px;">
         AI Model Intelligence Platform
       </div>
     </div>

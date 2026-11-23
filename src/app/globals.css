@@ -3,13 +3,13 @@
 @tailwind utilities;
 
 :root {
-  --background: #060907;
-  --foreground: #f0fdf4;
-  --card: #0d1410;
-  --card-hover: #131f18;
-  --card-border: #192a20;
-  --accent-blue: #10b981;
-  --accent-violet: #14b8a6;
+  --background: #0a0714;
+  --foreground: #faf5ff;
+  --card: #120d24;
+  --card-hover: #1a1333;
+  --card-border: #251b47;
+  --accent-blue: #8b5cf6;
+  --accent-violet: #ec4899;
 }
 
 body {
@@ -26,41 +26,41 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #060907;
+  background: #0a0714;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #192a20;
+  background: #251b47;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #263b2e;
+  background: #3b2e68;
 }
 
 /* Subtle glow effects */
 .glow-border {
-  border: 1px solid rgba(16, 185, 129, 0.25);
+  border: 1px solid rgba(139, 92, 246, 0.25);
   transition: all 0.2s ease-in-out;
 }
 
 .glow-border:hover {
-  border-color: rgba(16, 185, 129, 0.55);
-  box-shadow: 0 0 15px -3px rgba(16, 185, 129, 0.25);
+  border-color: rgba(139, 92, 246, 0.55);
+  box-shadow: 0 0 15px -3px rgba(139, 92, 246, 0.25);
 }
 
 .glow-text-blue {
-  text-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+  text-shadow: 0 0 12px rgba(139, 92, 246, 0.5);
 }
 
 .glow-text-violet {
-  text-shadow: 0 0 12px rgba(20, 184, 166, 0.5);
+  text-shadow: 0 0 12px rgba(236, 72, 153, 0.5);
 }
 
 /* Glassmorphism */
 .glass-panel {
-  background: rgba(13, 20, 16, 0.75);
+  background: rgba(18, 13, 36, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(25, 42, 32, 0.85);
+  border: 1px solid rgba(37, 27, 71, 0.85);
 }
