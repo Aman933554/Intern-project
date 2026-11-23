@@ -12,8 +12,8 @@
 ---
 
 ### 🌐 Quick Links & Deployment
+- **Live Production URL:** [https://intern-project-1j21.vercel.app](https://intern-project-1j21.vercel.app)
 - **GitHub Repository:** [https://github.com/Aman933554/Intern-project](https://github.com/Aman933554/Intern-project)
-- **Live Deployment Link:** [https://intern-project.vercel.app](https://intern-project.vercel.app) *(or your Vercel deployment URL)*
 - **Local Development URL:** `http://localhost:3000`
 - **Automated Workflow Test Suite:** `npm run test:workflows` (**18/18 Tests Passing**)
 
@@ -419,7 +419,7 @@ git push origin main
 ### Step 3: Configure Environment Variables
 Under **Environment Variables**, add:
 - `DATABASE_URL`: Your Neon PostgreSQL connection string.
-- `NEXT_PUBLIC_APP_URL`: Your production Vercel domain (e.g. `https://oneatlas.vercel.app`).
+- `NEXT_PUBLIC_APP_URL`: Your production Vercel domain (`https://intern-project-1j21.vercel.app`).
 
 ### Step 4: Deploy & Seed
 Click **Deploy**. Once the build succeeds, run database seeding against your Neon database from your local machine:
