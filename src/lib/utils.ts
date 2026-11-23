@@ -40,10 +40,13 @@ export function formatDate(dateString: string | null | undefined): string {
 }
 
 export function getCompanyInitials(name: string): string {
-  if (!name) return "AI";
-  const parts = name.split(" ");
-  if (parts.length >= 2) {
-    return `${parts[0][0]}${parts[1][0]}`.toUpperCase();
+  if (!name || typeof name !== "string") return "AI";
+  const cleanParts = name.trim().split(/\s+/).filter(Boolean);
+  if (cleanParts.length >= 2 && cleanParts[0]?.[0] && cleanParts[1]?.[0]) {
+    return `${cleanParts[0][0]}${cleanParts[1][0]}`.toUpperCase();
   }
-  return name.slice(0, 2).toUpperCase();
+  if (cleanParts[0]) {
+    return cleanParts[0].slice(0, 2).toUpperCase();
+  }
+  return "AI";
 }

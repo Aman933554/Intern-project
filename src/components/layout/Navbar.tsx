@@ -109,13 +109,13 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center gap-2 p-1.5 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200 hover:bg-surface-300 border border-surface-300 text-white transition-colors"
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200 hover:bg-surface-300 border border-surface-300 text-white transition-colors cursor-pointer"
               >
-                <div className="relative w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-[10px] shadow-glow">
-                  {getCompanyInitials(user.name)}
+                <div className="relative w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-[10px] text-white shrink-0 shadow-glow select-none">
+                  <span>{getCompanyInitials(user.name)}</span>
                   <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-emerald-400 ring-1 ring-card" />
                 </div>
-                <span className="text-xs font-semibold max-w-[120px] truncate">
+                <span className="text-xs font-semibold text-white max-w-[120px] truncate shrink-0">
                   {user.name}
                 </span>
               </button>
