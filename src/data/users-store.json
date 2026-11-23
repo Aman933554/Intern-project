@@ -17,6 +17,18 @@
       "name": "aman",
       "email": "amansharma846706@gmail.com",
       "password": "123aman@Aman"
+    },
+    {
+      "id": "usr_1795428306796_wdn5",
+      "name": "aman",
+      "email": "aman933554sharma@gmail.com",
+      "password": "123aman@Aman"
+    },
+    {
+      "id": "usr_1795429659453_x8ic",
+      "name": "Intern Tester",
+      "email": "test_1795429659452@oneatlas.dev",
+      "password": "testpass123"
     }
   ],
   "savedModels": {
@@ -30,6 +42,14 @@
       "gemini-2-0-flash"
     ],
     "usr_1795425515089_ngs8": [
+      "gpt-4o",
+      "gemini-2-0-flash"
+    ],
+    "usr_1795428306796_wdn5": [
+      "gpt-4o",
+      "gemini-2-0-flash"
+    ],
+    "usr_1795429659453_x8ic": [
       "gpt-4o",
       "gemini-2-0-flash"
     ]

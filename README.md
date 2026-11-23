@@ -7,7 +7,15 @@
 ![Database](https://img.shields.io/badge/Database-PostgreSQL%20%2B%20Prisma%20ORM-emerald)
 ![TypeScript](https://img.shields.io/badge/Language-TypeScript%205.6-blue)
 ![Styling](https://img.shields.io/badge/Design-Tailwind%20CSS%20Dark%20System-violet)
-![Tests](https://img.shields.io/badge/Tests-17%2F17%20Passing-brightgreen)
+![Tests](https://img.shields.io/badge/Tests-18%2F18%20Passing-brightgreen)
+
+---
+
+### 🌐 Quick Links & Deployment
+- **GitHub Repository:** [https://github.com/Aman933554/Intern-project](https://github.com/Aman933554/Intern-project)
+- **Live Deployment Link:** [https://intern-project.vercel.app](https://intern-project.vercel.app) *(or your Vercel deployment URL)*
+- **Local Development URL:** `http://localhost:3000`
+- **Automated Workflow Test Suite:** `npm run test:workflows` (**18/18 Tests Passing**)
 
 ---
 
@@ -296,8 +304,8 @@ All API routes are implemented under `src/app/api/` with strict Zod validation, 
 
 ### Step 1: Clone & Install Dependencies
 ```bash
-git clone https://github.com/your-username/oneatlas-dev.git
-cd oneatlas-dev
+git clone https://github.com/Aman933554/Intern-project.git
+cd Intern-project
 npm install
 ```
 
@@ -381,10 +389,11 @@ npm run test:workflows
 ✅ [TEST 15] PASSED: Mobile navigation and responsive layout configured
 ✅ [TEST 16] PASSED: Invalid model and company slugs safely return 404
 ✅ [TEST 17] PASSED: API validation (Zod) blocks invalid request payloads
+✅ [TEST 18] PASSED: User Authentication, Registration, and Saved Models Bookmarking (Option B)
 
 =================================================
-TOTAL TESTS: 17 | PASSED: 17 | FAILED: 0
-🎉 ALL 17 FUNCTIONAL TESTS PASSED!
+TOTAL TESTS: 18 | PASSED: 18 | FAILED: 0
+🎉 ALL 18 FUNCTIONAL TESTS PASSED!
 =================================================
 ```
 

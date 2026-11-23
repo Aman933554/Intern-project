@@ -1,5 +1,45 @@
 [
   {
+    "id": "mail_1795429318190",
+    "to": "amansharma846706@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T10:21:58.190Z",
+    "status": "sent"
+  },
+  {
+    "id": "mail_1795429287832",
+    "to": "aman933554sharma@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (aman933554sharma@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T10:21:27.832Z",
+    "status": "sent"
+  },
+  {
+    "id": "mail_1795429145411",
+    "to": "amansharma846706@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T10:19:05.411Z",
+    "status": "sent"
+  },
+  {
+    "id": "mail_1795428306800",
+    "to": "aman933554sharma@gmail.com",
+    "subject": "✨ Welcome to OneAtlas.dev, aman!",
+    "type": "welcome",
+    "sentAt": "2026-11-23T10:05:06.800Z",
+    "status": "sent"
+  },
+  {
+    "id": "mail_1795428210712",
+    "to": "amansharma846706@gmail.com",
+    "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
+    "type": "login",
+    "sentAt": "2026-11-23T10:03:30.712Z",
+    "status": "sent"
+  },
+  {
     "id": "mail_1795428094621",
     "to": "amansharma846706@gmail.com",
     "subject": "🔐 Security Alert: Successful Sign-in to OneAtlas.dev (amansharma846706@gmail.com)",
