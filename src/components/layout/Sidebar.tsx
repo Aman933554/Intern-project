@@ -25,7 +25,7 @@ interface SidebarProps {
 
 export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   const pathname = usePathname();
-  const { savedSlugs } = useAuth();
+  const { user, savedSlugs, logout } = useAuth();
 
   const navItems = [
     { label: "Overview", href: "/", icon: LayoutDashboard },
@@ -112,18 +112,41 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </nav>
         </div>
 
-        {/* Database & System Status Card at bottom */}
-        <div className="p-3 m-3 rounded-xl bg-surface-50 border border-surface-300 text-xs">
-          <div className="flex items-center gap-2 mb-2 text-gray-200 font-semibold">
-            <Database className="w-3.5 h-3.5 text-electric-blue" />
-            <span>Neon Engine</span>
-          </div>
-          <p className="text-[11px] text-gray-400 mb-2 leading-relaxed">
-            Connected via Prisma ORM with live relational indexing.
-          </p>
-          <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2 border-t border-surface-300 font-mono">
-            <span>MODELS: 37</span>
-            <span className="text-emerald-400 font-semibold">ONLINE</span>
+        {/* User Card & Database System Status */}
+        <div className="space-y-2 m-3">
+          {user ? (
+            <div className="p-2.5 rounded-xl bg-surface-100 border border-surface-300 text-xs flex items-center justify-between">
+              <div className="flex items-center gap-2 overflow-hidden">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-xs text-white shrink-0 shadow-glow">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <div className="font-semibold text-white truncate text-xs">{user.name}</div>
+                  <div className="text-[10px] text-gray-400 truncate">{user.email}</div>
+                </div>
+              </div>
+              <button
+                onClick={logout}
+                className="text-[10px] text-gray-400 hover:text-red-400 px-2 py-1 rounded hover:bg-red-500/10 transition-colors"
+                title="Sign Out"
+              >
+                Exit
+              </button>
+            </div>
+          ) : null}
+
+          <div className="p-3 rounded-xl bg-surface-50 border border-surface-300 text-xs">
+            <div className="flex items-center gap-2 mb-2 text-gray-200 font-semibold">
+              <Database className="w-3.5 h-3.5 text-electric-blue" />
+              <span>Neon Engine</span>
+            </div>
+            <p className="text-[11px] text-gray-400 mb-2 leading-relaxed">
+              Connected via Prisma ORM with live relational indexing.
+            </p>
+            <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2 border-t border-surface-300 font-mono">
+              <span>MODELS: 37</span>
+              <span className="text-emerald-400 font-semibold">ONLINE</span>
+            </div>
           </div>
         </div>
       </aside>

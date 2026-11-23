@@ -5,26 +5,27 @@ import { useUser } from "@clerk/nextjs";
 import { useAuth } from "@/context/AuthContext";
 
 function ClerkUserSyncInner() {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { setExternalUser } = useAuth();
+  const { isLoaded, isSignedIn, user: clerkUser } = useUser();
+  const { setExternalUser, user: currentUser } = useAuth();
 
   useEffect(() => {
     if (isLoaded) {
-      if (isSignedIn && user) {
+      if (isSignedIn && clerkUser) {
         setExternalUser({
-          id: user.id,
+          id: clerkUser.id,
           name:
-            user.fullName ||
-            user.firstName ||
-            user.primaryEmailAddress?.emailAddress ||
+            clerkUser.fullName ||
+            clerkUser.firstName ||
+            clerkUser.primaryEmailAddress?.emailAddress ||
             "Clerk User",
-          email: user.primaryEmailAddress?.emailAddress || "",
+          email: clerkUser.primaryEmailAddress?.emailAddress || "",
         });
-      } else {
+      } else if (!isSignedIn && currentUser?.id?.startsWith("user_")) {
+        // Only clear session if the active session was specifically a Clerk session
         setExternalUser(null);
       }
     }
-  }, [isLoaded, isSignedIn, user, setExternalUser]);
+  }, [isLoaded, isSignedIn, clerkUser, setExternalUser, currentUser]);
 
   return null;
 }
