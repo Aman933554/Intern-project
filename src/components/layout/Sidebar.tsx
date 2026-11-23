@@ -13,7 +13,6 @@ import {
   Info,
   Bookmark,
   Database,
-  ExternalLink,
   X,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
@@ -49,13 +48,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
       )}
 
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-40 w-64 bg-card/95 backdrop-blur-xl border-r border-surface-300/80 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 shadow-2xl ${
+        className={`fixed top-0 bottom-0 left-0 z-40 w-64 bg-card border-r border-surface-300 flex flex-col justify-between transition-transform duration-200 ease-in-out md:translate-x-0 ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
         <div>
           {/* Mobile close button header */}
-          <div className="flex md:hidden items-center justify-between p-4 border-b border-surface-300/80">
+          <div className="flex md:hidden items-center justify-between p-4 border-b border-surface-300">
             <span className="font-bold text-sm text-white">Navigation</span>
             <button
               onClick={onClose}
@@ -66,9 +65,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* Desktop spacer */}
-          <div className="hidden md:block h-16 border-b border-surface-300/80 px-6 flex items-center">
+          <div className="hidden md:block h-16 border-b border-surface-300 px-6 flex items-center">
             <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gray-400">
-              <span className="w-1.5 h-1.5 rounded-full bg-electric-blue animate-pulse" />
               <span>Platform Navigator</span>
             </div>
           </div>
@@ -87,23 +85,23 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                  className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all ${
                     isActive
-                      ? "bg-gradient-to-r from-electric-blue/20 via-violet/10 to-transparent text-white border border-electric-blue/40 shadow-glow"
-                      : "text-gray-400 hover:text-gray-100 hover:bg-surface-200/80"
+                      ? "bg-gradient-to-r from-electric-blue/15 to-violet/10 text-electric-blue border border-electric-blue/30 shadow-sm"
+                      : "text-gray-400 hover:text-gray-100 hover:bg-surface-200"
                   }`}
                 >
                   <div className="flex items-center gap-3">
                     <Icon
                       className={`w-4 h-4 ${
-                        isActive ? "text-electric-blue drop-shadow-[0_0_8px_rgba(14,165,233,0.6)]" : "text-gray-400"
+                        isActive ? "text-electric-blue" : "text-gray-400"
                       }`}
                     />
-                    <span className={isActive ? "font-semibold" : ""}>{item.label}</span>
+                    <span>{item.label}</span>
                   </div>
 
                   {item.badge !== undefined && (
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-electric-blue/20 text-electric-blue font-mono font-bold border border-electric-blue/30 shadow-sm">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-electric-blue/20 text-electric-blue font-mono font-semibold">
                       {item.badge}
                     </span>
                   )}
@@ -116,9 +114,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
         {/* User Card & Database System Status */}
         <div className="space-y-2 m-3">
           {user ? (
-            <div className="p-2.5 rounded-xl bg-surface-100/90 border border-surface-300/80 text-xs flex items-center justify-between shadow-sm">
+            <div className="p-2.5 rounded-xl bg-surface-100 border border-surface-300 text-xs flex items-center justify-between">
               <div className="flex items-center gap-2 overflow-hidden">
-                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-electric-blue via-indigo-500 to-violet flex items-center justify-center font-bold text-xs text-white shrink-0 shadow-glow select-none">
+                <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-xs text-white shrink-0 shadow-glow select-none">
                   {user.name.charAt(0).toUpperCase()}
                 </div>
                 <div className="min-w-0">
@@ -136,7 +134,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             </div>
           ) : null}
 
-          <div className="p-3 rounded-xl bg-surface-50/80 border border-surface-300/80 text-xs shadow-inner">
+          <div className="p-3 rounded-xl bg-surface-50 border border-surface-300 text-xs">
             <div className="flex items-center gap-2 mb-2 text-gray-200 font-semibold">
               <Database className="w-3.5 h-3.5 text-electric-blue" />
               <span>Neon Engine</span>
@@ -144,12 +142,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
             <p className="text-[11px] text-gray-400 mb-2 leading-relaxed">
               Connected via Prisma ORM with live relational indexing.
             </p>
-            <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2 border-t border-surface-300/60 font-mono">
+            <div className="flex items-center justify-between text-[10px] text-gray-500 pt-2 border-t border-surface-300 font-mono">
               <span>MODELS: 37</span>
-              <span className="text-emerald-400 font-semibold flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                ONLINE
-              </span>
+              <span className="text-emerald-400 font-semibold">ONLINE</span>
             </div>
           </div>
         </div>

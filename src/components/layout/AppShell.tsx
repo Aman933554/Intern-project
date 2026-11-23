@@ -19,14 +19,7 @@ export const AppShell: React.FC<{ children: React.ReactNode }> = ({
     <AuthProvider>
       <ClerkUserSync />
       <ComparisonProvider>
-        <div className="relative min-h-screen bg-background text-gray-100 flex flex-col selection:bg-electric-blue/30 selection:text-white overflow-x-hidden">
-          {/* Top luminous accent gradient border */}
-          <div className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-electric-blue via-violet to-transparent z-50 pointer-events-none opacity-80" />
-
-          {/* Ambient background light orbs */}
-          <div className="fixed -top-24 left-1/4 w-[600px] h-[350px] bg-electric-blue/8 rounded-full blur-[140px] pointer-events-none -z-10" />
-          <div className="fixed top-1/2 right-0 w-[500px] h-[400px] bg-violet/8 rounded-full blur-[160px] pointer-events-none -z-10" />
-
+        <div className="min-h-screen bg-background text-gray-100 flex flex-col selection:bg-electric-blue/30 selection:text-white">
           <Navbar onToggleSidebar={() => setIsSidebarOpen((prev) => !prev)} />
 
           <div className="flex-1 flex">
