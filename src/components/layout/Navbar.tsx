@@ -31,7 +31,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
   return (
     <>
       <header className="sticky top-0 z-40 w-full h-16 border-b border-surface-300/80 bg-background/80 backdrop-blur-xl px-4 sm:px-6 flex items-center justify-between shadow-lg">
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 shrink-0">
           {/* Mobile hamburger */}
           <button
             onClick={onToggleSidebar}
@@ -58,58 +58,58 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
         </div>
 
         {/* Global Search trigger */}
-        <div className="flex-1 max-w-md mx-4 hidden sm:block">
+        <div className="flex-1 max-w-xs md:max-w-sm lg:max-w-md mx-2 sm:mx-4 hidden md:block min-w-0">
           <button
             onClick={() => setIsSearchOpen(true)}
             className="w-full flex items-center justify-between px-3.5 py-1.5 rounded-lg bg-surface-100/90 border border-surface-300/80 hover:border-surface-400 text-gray-400 hover:text-gray-200 text-xs transition-all cursor-pointer shadow-inner hover:bg-surface-200/90"
           >
-            <div className="flex items-center gap-2">
-              <Search className="w-3.5 h-3.5 text-electric-blue" />
-              <span>Search models, labs, providers...</span>
+            <div className="flex items-center gap-2 truncate">
+              <Search className="w-3.5 h-3.5 text-electric-blue shrink-0" />
+              <span className="truncate">Search models, labs, providers...</span>
             </div>
-            <kbd className="px-1.5 py-0.5 bg-surface-300/80 border border-surface-400/80 rounded text-[10px] text-gray-300 font-mono">
+            <kbd className="px-1.5 py-0.5 bg-surface-300/80 border border-surface-400/80 rounded text-[10px] text-gray-300 font-mono shrink-0">
               Ctrl+K
             </kbd>
           </button>
         </div>
 
         {/* Right side items */}
-        <div className="flex items-center gap-2.5 sm:gap-3">
+        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Mobile search icon */}
           <button
             onClick={() => setIsSearchOpen(true)}
-            className="sm:hidden p-2 text-gray-400 hover:text-white"
+            className="md:hidden p-2 text-gray-400 hover:text-white"
             aria-label="Search"
           >
             <Search className="w-5 h-5" />
           </button>
 
-          {/* Database indicator */}
-          <div className="hidden lg:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-200/70 border border-surface-300/80 text-[11px] text-gray-300 font-mono shadow-sm">
+          {/* Database indicator (Visible on XL screens) */}
+          <div className="hidden xl:flex items-center gap-2 px-2.5 py-1 rounded-full bg-surface-200/70 border border-surface-300/80 text-[11px] text-gray-300 font-mono shadow-sm shrink-0">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-glow-emerald" />
             <span>PostgreSQL Ready</span>
           </div>
 
           <Link
             href="/models"
-            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors"
+            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors shrink-0"
           >
             <span>Explore</span>
           </Link>
 
           <Link
             href="/compare"
-            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors"
+            className="hidden sm:flex items-center gap-1 text-xs font-medium text-gray-300 hover:text-white px-2.5 py-1.5 rounded-lg hover:bg-surface-200/80 transition-colors shrink-0"
           >
             <span>Compare</span>
           </Link>
 
-          {/* User Auth Menu */}
+          {/* User Auth Menu / Sign In Button */}
           {user ? (
-            <div className="relative" ref={menuRef}>
+            <div className="relative shrink-0" ref={menuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
-                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200/90 hover:bg-surface-300/90 border border-surface-300 text-white transition-all cursor-pointer shadow-sm"
+                className="flex items-center gap-2 p-1 sm:px-2.5 sm:py-1 rounded-lg bg-surface-200/90 hover:bg-surface-300/90 border border-surface-300 text-white transition-all cursor-pointer shadow-sm shrink-0"
               >
                 <div className="relative w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue via-indigo-500 to-violet flex items-center justify-center font-bold text-[10px] text-white shrink-0 shadow-glow select-none">
                   <span>{getCompanyInitials(user.name)}</span>
@@ -157,7 +157,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           ) : (
             <button
               onClick={openAuthModal}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-electric-blue to-blue-600 hover:from-electric-blue-400 hover:to-electric-blue text-white shadow-glow transition-all cursor-pointer"
+              className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-gradient-to-r from-electric-blue to-blue-600 hover:from-electric-blue-400 hover:to-electric-blue text-white shadow-glow transition-all cursor-pointer shrink-0"
             >
               <User className="w-3.5 h-3.5" />
               <span>Sign In</span>
