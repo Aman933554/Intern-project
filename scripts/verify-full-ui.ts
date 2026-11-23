@@ -3,6 +3,7 @@
  * Checks all frontend endpoints, backend APIs, data transformations,
  * and calculations on the running production server (http://localhost:3000).
  */
+export {};
 
 const BASE_URL = "http://localhost:3000";
 

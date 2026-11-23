@@ -105,9 +105,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           </Link>
 
           {/* User Auth Menu */}
-          {isClerkActive ? (
-            <ClerkUserNav />
-          ) : user ? (
+          {user ? (
             <div className="relative" ref={menuRef}>
               <button
                 onClick={() => setIsUserMenuOpen((prev) => !prev)}
@@ -116,7 +114,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                 <div className="w-6 h-6 rounded-md bg-gradient-to-br from-electric-blue to-violet flex items-center justify-center font-bold text-[10px]">
                   {getCompanyInitials(user.name)}
                 </div>
-                <span className="text-xs font-medium hidden sm:inline max-w-[100px] truncate">
+                <span className="text-xs font-medium hidden sm:inline max-w-[120px] truncate">
                   {user.name}
                 </span>
               </button>
@@ -137,7 +135,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
                       <Bookmark className="w-3.5 h-3.5 text-electric-blue" />
                       <span>Saved Models</span>
                     </div>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-300 font-mono">
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-300 font-mono font-bold text-electric-blue">
                       {savedSlugs.length}
                     </span>
                   </Link>
@@ -158,7 +156,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onToggleSidebar }) => {
           ) : (
             <button
               onClick={openAuthModal}
-              className="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 text-white shadow-glow transition-all"
+              className="flex items-center gap-1.5 text-xs font-semibold px-3.5 py-1.5 rounded-lg bg-electric-blue hover:bg-electric-blue-600 text-white shadow-glow transition-all cursor-pointer"
             >
               <User className="w-3.5 h-3.5" />
               <span>Sign In</span>

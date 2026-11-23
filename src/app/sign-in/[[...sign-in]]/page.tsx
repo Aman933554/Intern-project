@@ -2,6 +2,7 @@ import React, { Suspense } from "react";
 import Link from "next/link";
 import { SignIn } from "@clerk/nextjs";
 import { Sparkles, Key, ArrowRight, ShieldCheck } from "lucide-react";
+import { QuickAuthTrigger } from "@/components/auth/QuickAuthTrigger";
 
 export const metadata = {
   title: "Sign In – OneAtlas.dev",
@@ -57,6 +58,8 @@ export default function SignInPage() {
               />
             </Suspense>
           </div>
+
+          <QuickAuthTrigger />
         </div>
       ) : (
         <div className="max-w-lg w-full bg-card border border-surface-300 rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">

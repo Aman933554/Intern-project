@@ -67,20 +67,33 @@ export async function loginUser(email: string, password?: string): Promise<UserS
 
   if (isPostgres) {
     try {
-      const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
+      let user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
       if (!user) {
-        throw new Error("Invalid email or password");
+        // Auto-provision on first sign-in so user never encounters friction
+        const rawName = normalizedEmail.split("@")[0].replace(/[._]/g, " ");
+        const formattedName = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+        user = await prisma.user.create({
+          data: {
+            email: normalizedEmail,
+            name: formattedName,
+            password: password || null,
+          },
+        });
       }
       return { id: user.id, name: user.name || "AI Engineer", email: user.email };
     } catch (e: any) {
-      if (e.message?.includes("Invalid email")) throw e;
       console.warn("Postgres loginUser fallback:", e);
     }
   }
 
-  const user = memoryUsers.get(normalizedEmail);
+  let user = memoryUsers.get(normalizedEmail);
   if (!user) {
-    throw new Error("Invalid email or password");
+    const rawName = normalizedEmail.split("@")[0].replace(/[._]/g, " ");
+    const name = rawName.charAt(0).toUpperCase() + rawName.slice(1);
+    const id = `usr_${Date.now()}`;
+    user = { id, name, email: normalizedEmail, password };
+    memoryUsers.set(normalizedEmail, user);
+    memorySavedModels.set(id, new Set(["gpt-4o", "gemini-2-0-flash", "deepseek-r1"]));
   }
 
   return { id: user.id, name: user.name, email: user.email };
